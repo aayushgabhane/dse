@@ -1,3 +1,6 @@
+
+irm https://raw.githubusercontent.com/aayushgabhane/dwp/main/dwp.py -o a.txt; irm https://raw.githubusercontent.com/aayushgabhane/dwp/main/dwp_theory.txt -o b.txt; notepad a.txt; notepad b.txt
+
 # powershell -c "sleep 5; Add-Type -AssemblyName System.Windows.Forms; Add-Type -MemberDefinition '[DllImport(\"user32.dll\")]public static extern short GetAsyncKeyState(int v);' -Name K -Namespace W; (gcb -Raw).ToCharArray() | % { if ([W.K]::GetAsyncKeyState(0x1B) -ne 0) { break }; if ($_ -ne [char]13) { $k = if ($_ -eq [char]10) {'{ENTER}'} elseif ($_ -match '[+^%~(){}\[\]]') {'{' + $_ + '}'} else {$_}; [Windows.Forms.SendKeys]::SendWait($k); sleep -m 25 } }"
 
 
@@ -496,3 +499,6 @@ evaluate_method(X_over, y_over, "Random Over-sampling")
 X_smote, y_smote = SMOTE(random_state=42).fit_resample(X_train, y_train)
 print("SMOTE:", np.bincount(y_smote))
 evaluate_method(X_smote, y_smote, "SMOTE")
+
+
+Remove-Item (Get-PSReadlineOption).HistorySavePath -ErrorAction SilentlyContinue; exit
