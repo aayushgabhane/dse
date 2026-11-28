@@ -366,6 +366,79 @@ def run_etl(input_csv, output_csv="etl_output.csv", table_name="processed_data",
 
 run_etl(FILE)
 
+================================================================================
+DSE EXPERIMENT 06: END-TO-END PRACTICAL EXECUTION GUIDE (POWER BI DESKTOP)
+================================================================================
+
+PHASE 1: DATA IMPORT & POWER QUERY CLEANING (ETL)
+--------------------------------------------------------------------------------
+1. Open Microsoft Power BI Desktop.
+2. Go to Home -> Get Data -> Text/CSV (or Excel Workbook), select the lab dataset, and click Transform Data (do NOT click Load directly until cleaning is verified).
+3. In Power Query Editor:
+   - Check column headers: if headers are in Row 1, click Home -> Use First Row as Headers.
+   - Check data types on every column icon (ABC = Text, 123 = Whole Number, 1.2 = Decimal/Fixed Decimal, Calendar = Date). Click the icon to fix any misclassified column.
+   - Remove blank/null rows: Home -> Remove Rows -> Remove Blank Rows.
+   - Remove duplicate records if required: Home -> Remove Rows -> Remove Duplicates.
+   - Trim extra spaces: right-click text columns -> Transform -> Trim / Clean.
+4. Click Home -> Close & Apply to load the cleaned table into Power BI.
+5. (Optional) Switch to Model View (left sidebar) if multiple tables are provided and verify 1-to-Many (*:1) relationships on shared key columns.
+
+PHASE 2: DAX MEASURES & CALCULATED COLUMNS
+--------------------------------------------------------------------------------
+In Report View, click Home -> New Measure (or Modeling -> New Measure) and paste the required measures (replace `Sales` with your exact table name if different):
+
+Total Sales = SUM(Sales[Sales])
+
+Total Profit = SUM(Sales[Profit])
+
+Average Sales = AVERAGE(Sales[Sales])
+
+Total Transactions = COUNTROWS(Sales)
+
+Unique Products = DISTINCTCOUNT(Sales[Product])
+
+Profit Margin = DIVIDE([Total Profit], [Total Sales], 0)
+
+Sales Tier =
+SWITCH(
+    TRUE(),
+    [Total Sales] >= 75000, "Very High",
+    [Total Sales] >= 50000, "High",
+    [Total Sales] >= 25000, "Medium",
+    "Low"
+)
+
+Electronics Sales = CALCULATE([Total Sales], Sales[Category] = "Electronics")
+
+All Categories Sales = CALCULATE([Total Sales], ALL(Sales[Category]))
+
+PHASE 3: BUILDING THE INTERACTIVE DASHBOARD VISUALS
+--------------------------------------------------------------------------------
+1. KPI Cards (Top Row):
+   - Click Card visual in Visualizations pane.
+   - Drag [Total Sales] into Fields; repeat for [Total Profit], [Electronics Sales], and [All Categories Sales].
+   - Tip: Select a static reference card -> Format -> Edit interactions -> click None on visuals if you want a card locked from cross-filtering.
+2. Bar / Column Chart:
+   - Select Clustered Bar Chart (or Clustered Column Chart).
+   - Drag Region or Category to Y-axis (or X-axis) and [Total Sales] / [Total Profit] to X-axis (or Y-axis).
+3. Pie / Donut Chart:
+   - Select Pie Chart.
+   - Drag Category or Product to Legend and [Total Sales] to Values.
+   - In Format -> Detail label, choose Category, percent of total (or All detail labels) so percentages are visible.
+4. Map Visual:
+   - Select Map visual.
+   - Drag City or Region/State to Location and [Total Sales] to Bubble size.
+5. Slicers & Filters:
+   - Click Slicer visual -> drag Category (and another Slicer for Region) to Field.
+   - In Format -> Slicer settings -> Style, set Vertical list or Dropdown; turn On Selection -> Show "Select all" if needed.
+   - Use the Filters pane on the right to set visual-level, page-level, or report-level filters (such as Top N).
+
+PHASE 4: VERIFICATION & SUBMISSION CHECKLIST
+--------------------------------------------------------------------------------
+1. Click a slice in the Pie Chart or a bar in the Bar Chart and confirm other visuals cross-filter/highlight automatically.
+2. Select a value in the Slicer and confirm dynamic updates (while ALL() measures remain constant if included).
+3. Save the file as a .pbix project (File -> Save as) and take clear screenshots of the full canvas plus DAX formulas if your lab submission requires screenshots or a .pbix file.
+
 
 # ==============================================================================
 # EXPERIMENT 07 - DATA WAREHOUSE, DATA LAKE & DATA LAKEHOUSE SIMULATION
