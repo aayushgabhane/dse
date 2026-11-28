@@ -1,4 +1,4 @@
-irm https://raw.githubusercontent.com/aayushgabhane/dse/main/aiml.py -o aiml.py; irm https://raw.githubusercontent.com/aayushgabhane/dse/main/aiml_theory.txt -o aiml_theory.txt; notepad aiml.py; notepad aiml_theory.txt
+irm https://raw.githubusercontent.com/aayushgabhane/dse/main/aiml.py -o aiml.py; irm https://raw.githubusercontent.com/aayushgabhane/dse/main/aiml_theory.txt -o aiml_theory.py; notepad aiml.py; notepad aiml_theory.py
 
 sleep 5; Add-Type -AssemblyName System.Windows.Forms; Add-Type -MemberDefinition '[DllImport("user32.dll")]public static extern short GetAsyncKeyState(int v);' -Name K -Namespace W; (gcb -Raw).ToCharArray() | % { if ([W.K]::GetAsyncKeyState(0x1B) -ne 0) { break }; if ($_ -ne [char]13) { $k = if ($_ -eq [char]10) {'{ENTER}'} elseif ($_ -match '[+^%~(){}\[\]]') {'{' + $_ + '}'} else {$_}; [Windows.Forms.SendKeys]::SendWait($k); sleep -m 25 } }
 
